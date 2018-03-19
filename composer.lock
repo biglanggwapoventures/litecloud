@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc57129f3c091229423cb19aa888209c",
+    "content-hash": "7a428a78c23e07da0b7d6aad3ea3e838",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -924,12 +924,17 @@
         },
         {
             "name": "natabio/bs4-form",
-            "version": "9999999-dev",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/biglanggwapoventures/bootstrap-form.git",
+                "reference": "bfd4eac8f2e94fbfa97e4a3925b7e01cb5dbc77c"
+            },
             "dist": {
-                "type": "path",
-                "url": "/Users/administrator/Projects/Personal/bootstrap-form",
+                "type": "zip",
+                "url": "https://api.github.com/repos/biglanggwapoventures/bootstrap-form/zipball/bfd4eac8f2e94fbfa97e4a3925b7e01cb5dbc77c",
                 "reference": "bfd4eac8f2e94fbfa97e4a3925b7e01cb5dbc77c",
-                "shasum": null
+                "shasum": ""
             },
             "require": {
                 "laravel/framework": "5.5.*",
@@ -949,6 +954,7 @@
                     "Natabio\\BS4Form\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0+"
             ],
@@ -958,7 +964,8 @@
                     "email": "adriannatabio@gmail.com"
                 }
             ],
-            "description": "Laravel Collective 5 based Twitter Bootstrap 4 Form service."
+            "description": "Laravel Collective 5 based Twitter Bootstrap 4 Form service.",
+            "time": "2018-03-16T13:15:27+00:00"
         },
         {
             "name": "nesbot/carbon",
