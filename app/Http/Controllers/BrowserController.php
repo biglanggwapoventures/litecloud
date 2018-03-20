@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Object;
+use App\FileObject;
 use Auth;
 use Illuminate\Http\Request;
 use Session;
@@ -15,7 +15,7 @@ class BrowserController extends Controller
     protected $model;
     protected $user;
 
-    public function __construct(Request $request, Object $model)
+    public function __construct(Request $request, FileObject $model)
     {
         $this->request = $request;
         $this->model = $model;

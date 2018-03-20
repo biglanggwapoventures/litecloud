@@ -4,8 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Object extends Model
+class FileObject extends Model
 {
+    protected $table = 'objects';
+
     protected $fillable = [
         'object_type',
         'is_root_folder',

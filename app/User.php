@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\FileObject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Storage;
@@ -30,7 +31,7 @@ class User extends Authenticatable
 
     public function files()
     {
-        return $this->hasOne(Object::class, 'owner_id');
+        return $this->hasOne(FileObject::class, 'owner_id');
     }
 
     public function getRootFolder()
