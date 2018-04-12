@@ -67,7 +67,7 @@
           <div class="col-md-9 pr-0">
               <div class="nav-scroller bg-white">
                   <nav class="nav nav-underline path">
-                      <a class="nav-link" href="">{{ auth()->user()->email }}</a>
+                      <a class="nav-link" href="{{ route('directory.browse') }}">{{ auth()->user()->email }}</a>
                   </nav>
               </div>
           </div>
@@ -209,7 +209,8 @@
           parallelUploads: 100,
           maxFiles: 5,
           addRemoveLinks: true,
-          createImageThumbnails:true
+          createImageThumbnails:true,
+          timeout: 180000,
       });
 
       myDropzone.on("error", function(file) {
