@@ -7,7 +7,7 @@ use App\FileObject as Folder;
 use Auth;
 use Illuminate\Http\Request;
 
-class DirectoryController extends Controller
+class _DirectoryController extends Controller
 {
     protected $user;
     protected $request;

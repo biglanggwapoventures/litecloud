@@ -25,5 +25,7 @@ class PersonalRegistration extends Controller
         $user = User::create($input);
 
         Auth::login($user);
+
+        return redirect(route('directory.browse'));
     }
 }

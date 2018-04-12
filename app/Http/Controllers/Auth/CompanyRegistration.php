@@ -39,5 +39,7 @@ class CompanyRegistration extends Controller
             Auth::login($user);
 
         }, 3);
+
+        return redirect(route('directory.browse'));
     }
 }

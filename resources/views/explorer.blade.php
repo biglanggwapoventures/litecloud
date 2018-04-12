@@ -53,7 +53,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="javascript:alert('Coming soon')">Profile</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" ">Logout</a>
+            <a class="dropdown-item" onclick="javascript:document.getElementById('logout-form').submit()">Logout</a>
             {!! Form::open(['url' => route('logout'), 'method' => 'post', 'id' => 'logout-form']) !!}
             {!! Form::close() !!}
           </div>
