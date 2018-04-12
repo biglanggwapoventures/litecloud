@@ -77,35 +77,24 @@
     </div>
 
         <main class="container pt-5">
-            @if($message = session('uploadSuccess'))
-              <div class="row">
-                <div class="col">
-                  <div class="alert alert-success">{{ $message }}</div>
-                </div>
-              </div>
-            @endif
             <div class="row">
-                @foreach($files->subObjects as $subfile)
+                @foreach($folders as $folder)
                 <div class="col-sm-2">
                     <div class="file-box">
                         <div class="file">
                             <div class="custom-control custom-checkbox select-file-wrapper position-absolute mt-1 ml-2">
-                              <input type="checkbox" class="custom-control-input select-file" id="check-{{ $subfile->id }}">
-                              <label class="custom-control-label" for="check-{{ $subfile->id }}">&nbsp;</label>
+                              <input type="checkbox" class="custom-control-input select-file" id="check-{{ $folder->id }}">
+                              <label class="custom-control-label" for="check-{{ $folder->id }}">&nbsp;</label>
                             </div>
-                            <a href="{{ $subfile->is('folder') ? (url()->current() . '/' . $subfile->filename) : '' }}">
+                            <a href="{{ route('my-files.browse', ['folder' => $folder->file_uid]) }}">
                                 <span class="corner"></span>
                                 <div class="icon">
-                                    @if($subfile->is('folder'))
-                                        <i class="fa fa-folder text-primary"></i>
-                                    @else
-                                        <i class="fa fa-file"></i>
-                                    @endif
+                                    <i class="fa fa-folder text-primary"></i>
                                 </div>
                                 <div class="file-name text-truncate">
-                                    {{ $subfile->filename }}
+                                    {{ $folder->filename }}
                                     <br>
-                                    <small>Created: {{ $subfile->created_at->format('M d, Y') }}</small>
+                                    <small>Created: {{ $folder->created_at->format('M d, Y') }}</small>
                                 </div>
                             </a>
                         </div>
@@ -123,9 +112,12 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              {!! Form::open(['url' => url()->current(), 'method' => 'POST', 'class' => 'ajax']) !!}
+              {!! Form::open(['url' => route('folders.store'), 'method' => 'POST', 'class' => 'ajax']) !!}
                   <div class="modal-body bg-light">
-                    {!! Form::inputGroup('text', 'Folder Name', 'name') !!}
+                    {!! Form::inputGroup('text', 'Folder Name', 'folder_name') !!}
+                    @if($currentFolder)
+                    {!! Form::hidden('object_parent', $currentFolder->id) !!}
+                    @endif
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
@@ -145,7 +137,7 @@
                 </button>
               </div>
                   <div class="modal-body bg-light" style="min-height: 200px;">
-                    {!! Form::open(['data-url' => route('browser.new.file', ['parameters' => $path]), 'method' => 'POST', 'class' => 'dropzone', 'id' => 'lite-dropzone']) !!}
+                    {!! Form::open(['data-url' => route('my-files.upload', ['folder' => $currentFolder->file_uid ?? '']), 'method' => 'POST', 'class' => 'dropzone', 'id' => 'lite-dropzone']) !!}
                     {!! Form::close() !!}
                   </div>
                   <div class="modal-footer">

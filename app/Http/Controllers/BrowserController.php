@@ -72,14 +72,15 @@ class BrowserController extends Controller
         $files = [];
 
         foreach ($this->request->file('file') as $file) {
-            $filename = str_replace(' ', '', $file->getClientOriginalName());
-            $file->storeAs($currentPath, $filename);
-
+            $file->store($currentPath);
             $files[] = [
-                'filename' => $filename,
-                'path' => "{$currentPath}/{$filename}",
+                'original_filename' => $file->getClientOriginalName(),
+                'filename' => $file->hashName(),
+                'path' => sprintf('%s/%s', $currentPath, $file->hashName()),
                 'object_type' => 'file',
                 'object_parent' => $parent->id,
+                'mime_type' => $file->getClientMimeType(),
+                'filesize' => $file->getClientSize(),
             ];
         }
 

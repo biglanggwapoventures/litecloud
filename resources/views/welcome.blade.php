@@ -12,8 +12,12 @@
 <body>
     {!! Form::open(['url' => route('login.post'), 'method' => 'POST', 'class' => 'form-signin']) !!}
       <div class="text-center mb-4">
-        <i class="fa fa-cloud fa-5x mb-2 d-block text-primary"></i>
-        <h1 class="h3 mb-1 font-weight-normal">Lite Cloud Storage</h1>
+        <div class="row">
+          <div class="col-6 offset-sm-3">
+            <img src="{{ asset('images/litecloud-white.png') }}" class="img-fluid mb-2" alt="">
+          </div>
+        </div>
+        <h1 class="h3 mb-1 font-weight-normal">Cloud Storage</h1>
         <p>Bring your files together in one central place.</p>
       </div>
 
@@ -38,8 +42,9 @@
       </div>
 
       <button class="btn btn-lg btn-outline-primary btn-block" type="submit">Sign in</button>
-      <a href="{{ route('register.show') }}" class="d-block mt-2 text-center">Click here to create a free account</a>
-      <p class="mt-5 mb-3 text-muted text-center">&copy; Lite Stock Technology Services 2018</p>
+      <p class="mt-3">
+        Create a <a href="{{ route('register.show') }}">personal</a> or a <a href="">corporate</a> account for free!
+      </p>
     {!! Form::close() !!}
 
 </body>

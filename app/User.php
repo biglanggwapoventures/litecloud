@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Directory;
 use App\FileObject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -29,14 +30,14 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function files()
+    public function ownedDirectories()
     {
-        return $this->hasOne(FileObject::class, 'owner_id');
+        return $this->hasMany(Directory::class, 'owner_id');
     }
 
-    public function getRootFolder()
+    public function files()
     {
-        # code...
+        return $this->hasMany(FileObject::class, 'owner_id');
     }
 
     public function createRootFolder()
@@ -56,5 +57,44 @@ class User extends Authenticatable
     public function setPasswordAttribute($val)
     {
         $this->attributes['password'] = bcrypt($val);
+    }
+
+    /**
+     * Creates an empty folder
+     * @param  string $filename The name of the folder to create
+     * @return FileObject
+     */
+    public function createFolder($filename, $props = [])
+    {
+        $props += [
+            'object_type' => 'folder',
+            'filename' => $filename,
+        ];
+
+        return $this->files()->create($props);
+    }
+
+    /**
+     * Checks if the owns a folder given the uid
+     * @param  String  $uid The folder uid
+     * @return boolean
+     */
+    public function hasFolder($uid)
+    {
+        return $this->files()
+            ->whereFileUid($uid)
+            ->whereObjectType('folder')
+            ->exists();
+    }
+
+    /**
+     * Retrieves the user's folders on root
+     * @return Collection
+     */
+    public function rootFolders()
+    {
+        return $this->files()
+            ->whereNull('object_parent')
+            ->whereObjectType('folder');
     }
 }
