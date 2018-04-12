@@ -3,6 +3,7 @@
 @push('css')
 <link rel="stylesheet" href="{{ asset('css/files.css') }}">
 <link rel="stylesheet" href="{{ asset('plugins/dropzone/dropzone.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/fancybox/jquery.fancybox.min.css') }}">
 @endpush
 
 @section('body')
@@ -37,10 +38,29 @@
           </div>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-      </form>
+
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ auth()->user()->email }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="javascript:alert('Coming soon')">Profile</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" ">Logout</a>
+            {!! Form::open(['url' => route('logout'), 'method' => 'post', 'id' => 'logout-form']) !!}
+            {!! Form::close() !!}
+          </div>
+        </li>
+
+      </ul>
+
     </div>
   </nav>
       <div class="row d-flex navigation position-sticky" style="top:0;z-index:10">
@@ -65,32 +85,62 @@
           </div>
   </div>
 
-      <main class="container pt-5">
-          <div class="row">
-              @foreach($folders ?? collect([]) as $folder)
-              <div class="col-sm-2">
-                  <div class="file-box">
-                      <div class="file">
-                          <div class="custom-control custom-checkbox select-file-wrapper position-absolute mt-1 ml-2">
-                            <input type="checkbox" class="custom-control-input select-file" id="check-{{ $folder->id }}">
-                            <label class="custom-control-label" for="check-{{ $folder->id }}">&nbsp;</label>
-                          </div>
-                          <a href="{{ route('my-files.browse', ['folder' => $folder->file_uid]) }}">
-                              <span class="corner"></span>
-                              <div class="icon">
-                                  <i class="fa fa-folder text-primary"></i>
-                              </div>
-                              <div class="file-name text-truncate">
-                                  {{ $folder->filename }}
-                                  <br>
-                                  <small>Created: {{ $folder->created_at->format('M d, Y') }}</small>
-                              </div>
-                          </a>
-                      </div>
-                  </div>
-              </div>
-              @endforeach
+      <main class="container-fluid pt-3">
+        <div class="row">
+          <div class="col-sm-9">
+            <div class="row">
+              @foreach($subDirectories as $folder)
+                <div class="col-sm-2 col-6">
+                    <div class="file-box">
+                        <div class="file">
+                            <div class="custom-control custom-checkbox select-file-wrapper position-absolute mt-1 ml-2">
+                              <input type="checkbox" class="custom-control-input select-file" id="check-{{ $folder->id }}">
+                              <label class="custom-control-label" for="check-{{ $folder->id }}">&nbsp;</label>
+                            </div>
+                            <a href="{{ route('directory.browse', $folder) }}">
+                                <span class="corner"></span>
+                                <div class="icon">
+                                    <i class="fa fa-folder text-primary"></i>
+                                </div>
+                                <div class="file-name text-truncate">
+                                    {{ $folder->name }}
+                                    <br>
+                                    <small>{{ $folder->updated_at->format('M d, Y') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+                @foreach($items as $item)
+                <div class="col-sm-2 col-6">
+                    <div class="file-box">
+                        <div class="file">
+                            <div class="custom-control custom-checkbox select-file-wrapper position-absolute mt-1 ml-2">
+                              <input type="checkbox" class="custom-control-input select-file" id="check-{{ $item->id }}">
+                              <label class="custom-control-label" for="check-{{ $item->id }}">&nbsp;</label>
+                            </div>
+                            <a href="{{ route('download.single', $item) }}">
+                                <span class="corner"></span>
+                                <div class="icon">
+                                    <i class="fa {{ iconFromMime($item->mime_type) }} text-info"></i>
+                                </div>
+                                <div class="file-name text-truncate">
+                                    {{ $item->file_name }}
+                                    <br>
+                                    <small>{{ $item->updated_at->format('M d, Y') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
           </div>
+          <div class="col-sm-3">
+
+          </div>
+        </div>
       </main>
       <div class="modal fade" id="new-folder-modal" tabindex="-1" role="dialog" aria-labelledby="new-folder-modal-label" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
@@ -127,7 +177,7 @@
               </button>
             </div>
                 <div class="modal-body bg-light" style="min-height: 200px;">
-                  {!! Form::open(['data-url' => route('directory.put', ['folder' => $currentFolder->file_uid ?? '']), 'method' => 'PUT', 'class' => 'dropzone', 'id' => 'lite-dropzone']) !!}
+                  {!! Form::open(['data-url' => route('directory.put', $currentDirectory), 'method' => 'PUT', 'class' => 'dropzone', 'id' => 'lite-dropzone']) !!}
                   {!! Form::close() !!}
                 </div>
                 <div class="modal-footer">
@@ -145,6 +195,7 @@
 @push('js')
 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
 <script type="text/javascript" src="{{ asset('plugins/dropzone/dropzone.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('plugins/fancybox/jquery.fancybox.min.js') }}"></script>
 <script  type="text/javascript">
   Dropzone.autoDiscover = false;
   $(document).ready(function () {
@@ -154,7 +205,7 @@
           autoProcessQueue: false,
           uploadMultiple: true,
           parallelUploads: 100,
-          maxFiles: 100,
+          maxFiles: 5,
           addRemoveLinks: true,
           createImageThumbnails:true
       });

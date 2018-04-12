@@ -20,8 +20,8 @@ $('form.ajax').submit(function (e) {
         contentType: false,
         processData: false,
         success: function(res) {
-            if(res.hasOwnProperty('next_url')){
-                window.location.href = res.next_url;
+            if(res.hasOwnProperty('url')){
+                window.location.href = res.url;
             }else if($this.data('next-url')){
                 window.location.href = $this.data('next-url');
             }else{
@@ -30,7 +30,6 @@ $('form.ajax').submit(function (e) {
         },
         error: function (err) {
             if(err.status == 422){
-                // alertify.alert('Ooops!', 'Some fields contain errors. Please verify that all inputs are valid and try submitting again.');
                 var errors = err.responseJSON['errors'];
 
                 for(var field in errors){

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Directory;
+use Spatie\MediaLibrary\Models\Media;
 
 class DirectoryController extends Controller
 {
@@ -26,10 +27,15 @@ class DirectoryController extends Controller
         }
 
         if (isset($input['cd'])) {
-            return redirect(route('directory.browse', $newDirectory));
+            return response()->json([
+                'result' => true,
+                'url' => route('directory.browse', $newDirectory),
+            ]);
         }
 
-        return back();
+        return response()->json([
+            'result' => true,
+        ]);
     }
 
     /**
@@ -55,8 +61,18 @@ class DirectoryController extends Controller
      */
     public function viewContents(Directory $directory = null)
     {
+        $subDirectories = $directory ? $directory->subDirectories : auth()->user()->ownedDirectories;
+        $items = $directory ? $directory->getMedia() : [];
+
         return view('explorer', [
             'currentDirectory' => $directory,
+            'subDirectories' => $subDirectories,
+            'items' => $items,
         ]);
+    }
+
+    public function downloadSingle(Media $mediaItem)
+    {
+        return $mediaItem;
     }
 }

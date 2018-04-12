@@ -22,6 +22,8 @@ Route::group(['prefix' => 'files', 'as' => 'directory.'], function () {
     Route::put('{directory?}', 'DirectoryController@put')->name('put');
 });
 
+Route::get('download/{mediaItem}', 'DirectoryController@downloadSingle')->name('download.single');
+Route::post('logout', 'Auth\LogoutController')->name('logout');
 // Route::get('files/{parameters?}', 'BrowserController')->where('parameters', '.*')->middleware('file-check')->name('browse.files');
 // Route::post('files/{parameters?}', 'BrowserController@createNewFolder')->where('parameters', '.*')->name('browser.new.folder');
 // Route::post('upload/{parameters?}', 'BrowserController@uploadFiles')->where('parameters', '.*')->name('browser.new.file');
