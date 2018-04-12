@@ -79,7 +79,9 @@
                         Friends
                         <span class="badge badge-pill bg-light align-text-bottom">27</span>
                       </a>
+                      @if($currentDirectory)
                       <a class="nav-link text-primary" data-target="#upload-file-modal" data-toggle="modal" style="cursor: pointer"><i class="fa fa-cloud-upload"></i> Upload new file</a>
+                      @endif
                   </nav>
               </div>
           </div>
@@ -210,8 +212,12 @@
           createImageThumbnails:true
       });
 
-      myDropzone.on("complete", function(file) {
-        // window.location.reload()
+      myDropzone.on("error", function(file) {
+        window.alert('Upload timeout / internal server error');
+      });
+
+      myDropzone.on("success", function(file) {
+        window.location.reload();
       });
 
       $('#upload').on('click',function(e){
